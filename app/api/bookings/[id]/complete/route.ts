@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: any
 ) {
-  const { id } = await context.params;
+  const id = params.id;
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
