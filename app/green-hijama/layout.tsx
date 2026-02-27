@@ -13,8 +13,8 @@ export default function ClinicLayout({
         </h1>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 px-6 py-10">
+      {/* Page Content */}
+      <main className="flex-1 px-6 py-10 flex items-center justify-center">
         {children}
       </main>
 
@@ -22,7 +22,6 @@ export default function ClinicLayout({
       <footer className="py-6 text-center text-sm border-t border-white/20 opacity-80">
         © {new Date().getFullYear()} Green Hijama Clinic
       </footer>
-
     </div>
   );
 }
