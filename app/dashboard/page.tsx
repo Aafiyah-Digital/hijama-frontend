@@ -7,20 +7,33 @@ import LogoutButton from "../components/logout-button";
 export default async function Dashboard() {
   const supabase = await createServerSupabase();
 
+  // Get logged in user
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect if not logged in
   if (!user) {
     redirect("/login");
   }
 
-  // Fetch bookings
-  const { data: bookings } = await supabase
+  // Fetch bookings with service name join
+  const { data: bookings, error } = await supabase
     .from("bookings")
-    .select("*")
+    .select(`
+      id,
+      full_name,
+      phone,
+      booking_date,
+      booking_time,
+      services (
+        name
+      )
+    `)
     .order("booking_date", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching bookings:", error);
+  }
 
   return (
     <div className="min-h-screen bg-black text-white p-10">
@@ -62,7 +75,9 @@ export default async function Dashboard() {
               >
                 <td className="p-3">{booking.full_name}</td>
                 <td className="p-3">{booking.phone}</td>
-                <td className="p-3">{booking.service_id}</td>
+                <td className="p-3">
+                  {booking.services?.name ?? "Unknown"}
+                </td>
                 <td className="p-3">{booking.booking_date}</td>
                 <td className="p-3">{booking.booking_time}</td>
               </tr>
