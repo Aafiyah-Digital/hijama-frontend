@@ -72,18 +72,19 @@ export default function Book() {
 }
 
   return (
-    <div className="max-w-xl mx-auto bg-white text-black rounded-2xl shadow-lg p-8">
-      <h2 className="text-2xl font-bold mb-6 text-center">
+  <div className="min-h-screen bg-black text-white flex items-center justify-center p-10">
+    <div className="w-full max-w-xl bg-white/5 border border-green-600/40 rounded-2xl shadow-lg p-10 backdrop-blur-sm">
+      <h2 className="text-2xl font-bold mb-8 text-center">
         Book Appointment
       </h2>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <input
           name="full_name"
           type="text"
           placeholder="Full Name"
           required
-          className="w-full border rounded-lg px-4 py-3"
+          className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
         />
 
         <input
@@ -91,14 +92,13 @@ export default function Book() {
           type="tel"
           placeholder="Phone Number"
           required
-          className="w-full border rounded-lg px-4 py-3"
+          className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
         />
 
-        {/* Dynamic Services */}
         <select
           name="service_id"
           required
-          className="w-full border rounded-lg px-4 py-3"
+          className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500"
         >
           <option value="">Select Service</option>
           {services.map((service) => (
@@ -112,24 +112,25 @@ export default function Book() {
           name="booking_date"
           type="date"
           required
-          className="w-full border rounded-lg px-4 py-3"
+          className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500"
         />
 
         <input
           name="booking_time"
           type="time"
           required
-          className="w-full border rounded-lg px-4 py-3"
+          className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500"
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-black text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+          className="w-full bg-green-600 hover:bg-green-500 text-black py-3 rounded-lg font-semibold transition disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit Booking"}
         </button>
       </form>
     </div>
-  );
+  </div>
+);
 }
