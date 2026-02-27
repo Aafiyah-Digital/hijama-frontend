@@ -11,14 +11,20 @@ export async function POST(request: Request) {
 
   const { error } = await supabase.from("bookings").insert([
     {
+      clinic_id: body.clinic_id,
+      service_id: body.service_id, // ✅ FIXED
       full_name: body.full_name,
       phone: body.phone,
-      service: body.service,
+      booking_date: body.booking_date,
+      booking_time: body.booking_time,
     },
   ]);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ success: true });
