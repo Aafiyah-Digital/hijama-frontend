@@ -4,7 +4,7 @@ import { createServerSupabase } from "@/app/lib/supabase-server";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
 
   const {
     data: { user },
