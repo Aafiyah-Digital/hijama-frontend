@@ -1,9 +1,9 @@
 export default function GreenHijama() {
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-10">
+    <div className="min-h-screen flex items-center justify-center p-10">
       <div className="max-w-md w-full text-center space-y-8">
-        <h2 className="text-4xl font-extrabold">
-          hijama<span className="text-green-500">.bio</span>
+        <h2 className="text-4xl font-extrabold text-green-500">
+          Green Hijama Clinic
         </h2>
 
         <p className="text-gray-400">
