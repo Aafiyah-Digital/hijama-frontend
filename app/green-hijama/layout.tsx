@@ -4,17 +4,17 @@ export default function ClinicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[var(--brand-green)] text-white flex flex-col">
+    <div className="min-h-screen bg-[#2e8b14] text-white flex flex-col">
       
       {/* Header */}
       <header className="py-6 text-center border-b border-white/20">
-        <h1 className="text-2xl font-bold tracking-wide">
+        <h1 className="text-2xl font-bold tracking-wide text-white">
           Green Hijama Clinic
         </h1>
       </header>
 
-      {/* Page Content */}
-      <main className="flex-1 px-6 py-10 flex items-center justify-center">
+      {/* Centered Content */}
+      <main className="flex-1 flex items-center justify-center px-6">
         {children}
       </main>
 
@@ -22,6 +22,7 @@ export default function ClinicLayout({
       <footer className="py-6 text-center text-sm border-t border-white/20 opacity-80">
         © {new Date().getFullYear()} Green Hijama Clinic
       </footer>
+
     </div>
   );
 }

@@ -2,14 +2,14 @@ export default function GreenHijama() {
   return (
     <div className="max-w-md w-full text-center space-y-8">
       <h2 className="text-4xl font-extrabold text-white">
-        Professional Hijama Therapy
+        Green Hijama Clinic
       </h2>
 
       <p className="text-white/80">
         Professional Hijama therapy in London.
       </p>
 
-      <div className="space-y-4">
+      <div className="space-y-4 pt-4">
         <a
           href="/green-hijama/services"
           className="block w-full bg-white text-black py-3 rounded-xl font-semibold hover:opacity-90 transition"
