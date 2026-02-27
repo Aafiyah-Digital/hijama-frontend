@@ -6,20 +6,17 @@ export default function ClinicLayout({
   return (
     <div className="min-h-screen bg-[#2e8b14] text-white flex flex-col">
       
-      {/* Header */}
       <header className="py-6 text-center border-b border-white/20">
-        <h1 className="text-2xl font-bold tracking-wide text-white">
+        <h1 className="text-2xl font-bold text-white">
           Green Hijama Clinic
         </h1>
       </header>
 
-      {/* Centered Content */}
       <main className="flex-1 flex items-center justify-center px-6">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="py-6 text-center text-sm border-t border-white/20 opacity-80">
+      <footer className="py-6 text-center border-t border-white/20 opacity-80">
         © {new Date().getFullYear()} Green Hijama Clinic
       </footer>
 
