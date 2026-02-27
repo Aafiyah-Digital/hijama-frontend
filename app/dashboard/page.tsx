@@ -15,7 +15,7 @@ export default async function Dashboard() {
     redirect("/login");
   }
 
-  // Server Action
+  // Mark Complete
   async function markComplete(formData: FormData) {
     "use server";
 
@@ -25,6 +25,19 @@ export default async function Dashboard() {
     await supabase
       .from("bookings")
       .update({ status: "completed" })
+      .eq("id", bookingId);
+  }
+
+  // Delete Booking
+  async function deleteBooking(formData: FormData) {
+    "use server";
+
+    const supabase = await createServerSupabase();
+    const bookingId = formData.get("bookingId") as string;
+
+    await supabase
+      .from("bookings")
+      .delete()
       .eq("id", bookingId);
   }
 
@@ -69,7 +82,7 @@ export default async function Dashboard() {
               <th className="p-3">Date</th>
               <th className="p-3">Time</th>
               <th className="p-3">Status</th>
-              <th className="p-3">Action</th>
+              <th className="p-3">Actions</th>
             </tr>
           </thead>
 
@@ -89,7 +102,7 @@ export default async function Dashboard() {
                 <td className="p-3 capitalize">
                   {booking.status ?? "pending"}
                 </td>
-                <td className="p-3">
+                <td className="p-3 flex gap-2">
                   {booking.status !== "completed" && (
                     <form action={markComplete}>
                       <input
@@ -98,10 +111,21 @@ export default async function Dashboard() {
                         value={booking.id}
                       />
                       <button className="bg-green-600 px-3 py-1 rounded-md text-sm hover:bg-green-700">
-                        Mark Complete
+                        Complete
                       </button>
                     </form>
                   )}
+
+                  <form action={deleteBooking}>
+                    <input
+                      type="hidden"
+                      name="bookingId"
+                      value={booking.id}
+                    />
+                    <button className="bg-red-600 px-3 py-1 rounded-md text-sm hover:bg-red-700">
+                      Delete
+                    </button>
+                  </form>
                 </td>
               </tr>
             ))}
