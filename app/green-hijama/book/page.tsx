@@ -74,7 +74,13 @@ export default function BookPage() {
       return;
     }
 
-    router.push("/green-hijama/confirmation");
+    router.push(
+      `/green-hijama/confirmation?name=${formData.get(
+        "full_name"
+      )}&date=${formData.get("booking_date")}&time=${formData.get(
+        "booking_time"
+      )}`
+    );
   }
 
   return (
