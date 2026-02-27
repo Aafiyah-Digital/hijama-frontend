@@ -22,41 +22,36 @@ export default function Login() {
       password,
     });
 
-    console.log("LOGIN DATA:", data);
-    console.log("LOGIN ERROR:", error);
-
     if (error) {
-      alert("Login error: " + error.message);
+      alert(error.message);
       setLoading(false);
       return;
     }
 
     if (!data?.session) {
-      alert("No session returned from Supabase.");
+      alert("No session returned.");
       setLoading(false);
       return;
     }
-
-    alert("Login successful. Attempting redirect...");
 
     router.replace("/dashboard");
     router.refresh();
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          Clinic Login
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="bg-white/5 border border-green-600/40 p-10 rounded-2xl w-full max-w-md backdrop-blur-sm">
+        <h1 className="text-3xl font-bold mb-8 text-center">
+          hijama<span className="text-green-500">.bio</span>
         </h1>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-6">
           <input
             name="email"
             type="email"
             placeholder="Email"
             required
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
           />
 
           <input
@@ -64,13 +59,13 @@ export default function Login() {
             type="password"
             placeholder="Password"
             required
-            className="w-full border rounded-lg px-4 py-3"
+            className="w-full bg-black border border-green-600/40 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg font-semibold disabled:opacity-50"
+            className="w-full bg-green-600 hover:bg-green-500 text-black py-3 rounded-lg font-semibold transition disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
