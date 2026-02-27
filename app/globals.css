@@ -1,10 +1,6 @@
 @import "tailwindcss";
 
-/* Remove old background system completely */
-
+/* Brand color only */
 :root {
   --brand-green: #2e8b14;
 }
-
-/* Remove body override completely */
-/* Let Tailwind control background via classes */
