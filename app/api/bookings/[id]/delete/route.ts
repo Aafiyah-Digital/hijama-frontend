@@ -1,11 +1,11 @@
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { NextResponse } from "next/server";
 
 export async function POST(
-  request: Request,
-  { params }: any
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,8 +18,8 @@ export async function POST(
     .eq("id", id);
 
   if (error) {
-    console.error("DELETE ERROR:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error(error);
+    return new Response("Error deleting booking", { status: 500 });
   }
 
   return NextResponse.redirect(new URL("/dashboard", request.url));
