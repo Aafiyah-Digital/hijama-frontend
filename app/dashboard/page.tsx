@@ -16,7 +16,7 @@ export default async function Dashboard() {
     redirect("/login");
   }
 
-  // Fetch bookings with service name join
+  // Fetch bookings with service name + status
   const { data: bookings, error } = await supabase
     .from("bookings")
     .select(`
@@ -25,6 +25,7 @@ export default async function Dashboard() {
       phone,
       booking_date,
       booking_time,
+      status,
       services (
         name
       )
@@ -64,6 +65,7 @@ export default async function Dashboard() {
               <th className="p-3">Service</th>
               <th className="p-3">Date</th>
               <th className="p-3">Time</th>
+              <th className="p-3">Status</th>
             </tr>
           </thead>
 
@@ -80,6 +82,9 @@ export default async function Dashboard() {
                 </td>
                 <td className="p-3">{booking.booking_date}</td>
                 <td className="p-3">{booking.booking_time}</td>
+                <td className="p-3 capitalize">
+                  {booking.status ?? "pending"}
+                </td>
               </tr>
             ))}
           </tbody>
