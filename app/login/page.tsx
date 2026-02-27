@@ -22,20 +22,25 @@ export default function Login() {
       password,
     });
 
+    console.log("LOGIN DATA:", data);
+    console.log("LOGIN ERROR:", error);
+
     if (error) {
-      alert(error.message);
+      alert("Login error: " + error.message);
       setLoading(false);
       return;
     }
 
-    if (data?.session) {
-      // slight delay to allow cookie persistence
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      router.replace("/dashboard");
-      router.refresh();
+    if (!data?.session) {
+      alert("No session returned from Supabase.");
+      setLoading(false);
+      return;
     }
 
-    setLoading(false);
+    alert("Login successful. Attempting redirect...");
+
+    router.replace("/dashboard");
+    router.refresh();
   }
 
   return (
