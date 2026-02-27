@@ -1,17 +1,19 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ConfirmationPage() {
   const params = useSearchParams();
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
-  const name = params.get("name");
-  const date = params.get("date");
-  const time = params.get("time");
+  useEffect(() => {
+    const name = params.get("name");
+    const date = params.get("date");
+    const time = params.get("time");
 
-  let downloadUrl: string | null = null;
+    if (!name || !date || !time) return;
 
-  if (name && date && time) {
     const start = new Date(`${date}T${time}`);
     const end = new Date(start.getTime() + 60 * 60 * 1000);
 
@@ -31,8 +33,10 @@ END:VCALENDAR
     `.trim();
 
     const blob = new Blob([icsContent], { type: "text/calendar" });
-    downloadUrl = URL.createObjectURL(blob);
-  }
+    const url = URL.createObjectURL(blob);
+
+    setDownloadUrl(url);
+  }, [params]);
 
   return (
     <div className="w-full max-w-xl bg-white/10 rounded-2xl p-10 text-center">
