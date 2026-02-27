@@ -1,19 +1,25 @@
-import { createServerSupabase } from "@/app/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createServerSupabase();
+  const { id } = await context.params;
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
   const { error } = await supabase
     .from("bookings")
     .delete()
-    .eq("id", params.id);
+    .eq("id", id);
 
   if (error) {
-    console.error(error);
+    console.error("DELETE ERROR:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
   return NextResponse.redirect(new URL("/dashboard", request.url));
