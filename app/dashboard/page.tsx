@@ -11,15 +11,16 @@ export default async function Dashboard() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Redirect if not logged in
   if (!user) {
     redirect("/login");
   }
 
-  // 🔹 Fetch bookings
-  const { data: bookings, error } = await supabase
+  // Fetch bookings
+  const { data: bookings } = await supabase
     .from("bookings")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("booking_date", { ascending: true });
 
   return (
     <div className="min-h-screen bg-black text-white p-10">
@@ -33,46 +34,41 @@ export default async function Dashboard() {
       </div>
 
       {/* User Info */}
-      <div className="bg-white/5 border border-green-600/40 rounded-xl p-6 max-w-lg mb-10">
+      <div className="bg-white/5 border border-green-600/40 rounded-xl p-6 max-w-lg mb-12">
         <p className="mb-2 text-gray-400">Logged in as:</p>
         <p className="text-lg font-semibold">{user.email}</p>
       </div>
 
       {/* Bookings Section */}
-      <div>
-        <h2 className="text-2xl font-semibold mb-6">Bookings</h2>
+      <h2 className="text-2xl font-semibold mb-6">Bookings</h2>
 
-        {!bookings || bookings.length === 0 ? (
-          <p className="text-gray-400">No bookings yet.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border border-green-600/40 rounded-lg overflow-hidden">
-              <thead className="bg-green-600 text-black">
-                <tr>
-                  <th className="text-left p-3">Name</th>
-                  <th className="text-left p-3">Email</th>
-                  <th className="text-left p-3">Phone</th>
-                  <th className="text-left p-3">Service</th>
-                  <th className="text-left p-3">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookings.map((booking: any) => (
-                  <tr
-                    key={booking.id}
-                    className="border-t border-green-600/20 hover:bg-white/5"
-                  >
-                    <td className="p-3">{booking.name}</td>
-                    <td className="p-3">{booking.email}</td>
-                    <td className="p-3">{booking.phone}</td>
-                    <td className="p-3">{booking.service}</td>
-                    <td className="p-3">{booking.date}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead className="bg-green-600 text-black">
+            <tr>
+              <th className="p-3">Full Name</th>
+              <th className="p-3">Phone</th>
+              <th className="p-3">Service</th>
+              <th className="p-3">Date</th>
+              <th className="p-3">Time</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {bookings?.map((booking: any) => (
+              <tr
+                key={booking.id}
+                className="border-t border-green-600/20 hover:bg-white/5"
+              >
+                <td className="p-3">{booking.full_name}</td>
+                <td className="p-3">{booking.phone}</td>
+                <td className="p-3">{booking.service_id}</td>
+                <td className="p-3">{booking.booking_date}</td>
+                <td className="p-3">{booking.booking_time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
