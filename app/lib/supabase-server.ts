@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function createServerSupabase() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies(); // ✅ await fixes TS error
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,8 +19,8 @@ export async function createServerSupabase() {
             ...options,
           });
         },
-        remove(name: string, options: any) {
-          cookieStore.delete(name); // ✅ THIS IS THE FIX
+        remove(name: string) {
+          cookieStore.delete(name);
         },
       },
     }
