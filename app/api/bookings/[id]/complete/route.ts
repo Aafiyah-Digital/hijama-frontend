@@ -18,7 +18,6 @@ export async function POST(
     .eq("id", id);
 
   if (error) {
-    console.error(error);
     return new Response("Error updating booking", { status: 500 });
   }
 
