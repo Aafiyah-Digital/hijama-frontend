@@ -7,6 +7,7 @@ import LogoutButton from "../components/logout-button";
 export default async function Dashboard() {
   const supabase = await createServerSupabase();
 
+  // Get logged-in user
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -15,32 +16,18 @@ export default async function Dashboard() {
     redirect("/login");
   }
 
-  // Mark Complete
-  async function markComplete(formData: FormData) {
-    "use server";
+  // Get clinic owned by this user
+  const { data: clinic } = await supabase
+    .from("clinics")
+    .select("id")
+    .eq("user_id", user.id)
+    .single();
 
-    const supabase = await createServerSupabase();
-    const bookingId = formData.get("bookingId") as string;
-
-    await supabase
-      .from("bookings")
-      .update({ status: "completed" })
-      .eq("id", bookingId);
+  if (!clinic) {
+    return <div>No clinic found for this user.</div>;
   }
 
-  // Delete Booking
-  async function deleteBooking(formData: FormData) {
-    "use server";
-
-    const supabase = await createServerSupabase();
-    const bookingId = formData.get("bookingId") as string;
-
-    await supabase
-      .from("bookings")
-      .delete()
-      .eq("id", bookingId);
-  }
-
+  // Fetch only this clinic's bookings
   const { data: bookings } = await supabase
     .from("bookings")
     .select(`
@@ -54,6 +41,7 @@ export default async function Dashboard() {
         name
       )
     `)
+    .eq("clinic_id", clinic.id)
     .order("booking_date", { ascending: true });
 
   return (
@@ -99,30 +87,33 @@ export default async function Dashboard() {
                 </td>
                 <td className="p-3">{booking.booking_date}</td>
                 <td className="p-3">{booking.booking_time}</td>
-                <td className="p-3 capitalize">
-                  {booking.status ?? "pending"}
-                </td>
+                <td className="p-3">{booking.status}</td>
+
                 <td className="p-3 flex gap-2">
+                  {/* Mark Complete */}
                   {booking.status !== "completed" && (
-                    <form action={markComplete}>
-                      <input
-                        type="hidden"
-                        name="bookingId"
-                        value={booking.id}
-                      />
-                      <button className="bg-green-600 px-3 py-1 rounded-md text-sm hover:bg-green-700">
+                    <form
+                      action={`/api/bookings/${booking.id}/complete`}
+                      method="POST"
+                    >
+                      <button
+                        type="submit"
+                        className="bg-green-500 text-black px-3 py-1 rounded"
+                      >
                         Complete
                       </button>
                     </form>
                   )}
 
-                  <form action={deleteBooking}>
-                    <input
-                      type="hidden"
-                      name="bookingId"
-                      value={booking.id}
-                    />
-                    <button className="bg-red-600 px-3 py-1 rounded-md text-sm hover:bg-red-700">
+                  {/* Delete */}
+                  <form
+                    action={`/api/bookings/${booking.id}/delete`}
+                    method="POST"
+                  >
+                    <button
+                      type="submit"
+                      className="bg-red-500 text-white px-3 py-1 rounded"
+                    >
                       Delete
                     </button>
                   </form>
