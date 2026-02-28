@@ -15,7 +15,6 @@ export default function BookPage() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch services
   useEffect(() => {
     async function fetchServices() {
       const { data: clinic } = await supabase
@@ -43,7 +42,6 @@ export default function BookPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    // Get clinic id
     const { data: clinic } = await supabase
       .from("clinics")
       .select("id")
@@ -51,35 +49,32 @@ export default function BookPage() {
       .single();
 
     if (!clinic) {
-      console.error("Clinic not found");
       setLoading(false);
       return;
     }
 
-    // Insert booking AND return inserted row
     const { data, error } = await supabase
-  .from("bookings")
-  .insert([
-    {
-      clinic_id: clinic.id,
-      service_id: formData.get("service_id"),
-      full_name: formData.get("full_name"),
-      phone: formData.get("phone"),
-      booking_date: formData.get("booking_date"),
-      booking_time: formData.get("booking_time"),
-      status: "pending",
-    },
-  ])
-  .select()
-  .single();
+      .from("bookings")
+      .insert([
+        {
+          clinic_id: clinic.id,
+          service_id: formData.get("service_id"),
+          full_name: formData.get("full_name"),
+          phone: formData.get("phone"),
+          booking_date: formData.get("booking_date"),
+          booking_time: formData.get("booking_time"),
+          status: "pending",
+        },
+      ])
+      .select()
+      .single();
 
-if (error || !data) {
-  console.error(error);
-  setLoading(false);
-  return;
-}
+    if (error || !data) {
+      setLoading(false);
+      return;
+    }
 
-router.push(`/green-hijama/confirmation?id=${data.id}`);
+    router.push(`/green-hijama/confirmation?id=${data.id}`);
   }
 
   return (
@@ -89,25 +84,9 @@ router.push(`/green-hijama/confirmation?id=${data.id}`);
       </h2>
 
       <form className="space-y-6" onSubmit={handleSubmit}>
-        <input
-          name="full_name"
-          placeholder="Full Name"
-          required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none"
-        />
-
-        <input
-          name="phone"
-          placeholder="Phone Number"
-          required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none"
-        />
-
-        <select
-          name="service_id"
-          required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white focus:outline-none"
-        >
+        <input name="full_name" required className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white" />
+        <input name="phone" required className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white" />
+        <select name="service_id" required className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white">
           <option value="">Select Service</option>
           {services.map((service) => (
             <option key={service.id} value={service.id}>
@@ -115,26 +94,9 @@ router.push(`/green-hijama/confirmation?id=${data.id}`);
             </option>
           ))}
         </select>
-
-        <input
-          name="booking_date"
-          type="date"
-          required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white focus:outline-none"
-        />
-
-        <input
-          name="booking_time"
-          type="time"
-          required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white focus:outline-none"
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-white text-black py-3 rounded-lg font-semibold transition disabled:opacity-50"
-        >
+        <input name="booking_date" type="date" required className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white" />
+        <input name="booking_time" type="time" required className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white" />
+        <button type="submit" disabled={loading} className="w-full bg-white text-black py-3 rounded-lg font-semibold">
           {loading ? "Submitting..." : "Submit Booking"}
         </button>
       </form>
