@@ -12,27 +12,13 @@ export default function ConfirmationPage() {
         Booking Confirmed 🎉
       </h2>
 
-      <p className="text-white/80 mb-8">
-        Your appointment has been received.
-        You can add it to your calendar below.
-      </p>
-
-      {id && (
-        <a
-          href={`/api/bookings/${id}/ics`}
-          className="inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold mb-4"
-        >
-          📅 Add to Calendar
-        </a>
-      )}
-
-      <br />
+      <p>ID: {id ?? "NO ID FOUND"}</p>
 
       <a
-        href="/green-hijama"
-        className="inline-block bg-white/20 text-white px-6 py-3 rounded-lg font-semibold"
+        href={id ? `/api/bookings/${id}/ics` : "#"}
+        className="inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold mt-6"
       >
-        Back to Home
+        Add to Calendar
       </a>
     </div>
   );
