@@ -1,25 +1,15 @@
-export const dynamic = "force-dynamic";
-"use client";
+export default function ConfirmationPage({
+  searchParams,
+}: {
+  searchParams: { name?: string; date?: string; time?: string };
+}) {
+  const { name, date, time } = searchParams;
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+  let downloadUrl: string | null = null;
 
-export default function ConfirmationPage() {
-  const params = useSearchParams();
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    const name = params.get("name");
-    const date = params.get("date");
-    const time = params.get("time");
-
-    if (!name || !date || !time) return;
-
+  if (name && date && time) {
     const start = new Date(`${date}T${time}`);
     const end = new Date(start.getTime() + 60 * 60 * 1000);
-
-    const formatDate = (d: Date) =>
-      d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
     const icsContent = `
 BEGIN:VCALENDAR
@@ -27,17 +17,15 @@ VERSION:2.0
 BEGIN:VEVENT
 SUMMARY:Hijama Appointment
 DESCRIPTION:Appointment for ${name}
-DTSTART:${formatDate(start)}
-DTEND:${formatDate(end)}
+DTSTART:${start.toISOString().replace(/[-:]/g, "").split(".")[0]}Z
+DTEND:${end.toISOString().replace(/[-:]/g, "").split(".")[0]}Z
 END:VEVENT
 END:VCALENDAR
-    `.trim();
+`;
 
-    const blob = new Blob([icsContent], { type: "text/calendar" });
-    const url = URL.createObjectURL(blob);
-
-    setDownloadUrl(url);
-  }, [params]);
+    const base64 = Buffer.from(icsContent).toString("base64");
+    downloadUrl = `data:text/calendar;base64,${base64}`;
+  }
 
   return (
     <div className="w-full max-w-xl bg-white/10 rounded-2xl p-10 text-center">
@@ -54,20 +42,18 @@ END:VCALENDAR
         <a
           href={downloadUrl}
           download="appointment.ics"
-          className="inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold mb-4"
+          className="block bg-white text-black px-6 py-3 rounded-lg font-semibold mb-4"
         >
           Add to Calendar
         </a>
       )}
 
-      <div>
-        <a
-          href="/green-hijama"
-          className="inline-block bg-white/20 text-white px-6 py-3 rounded-lg font-semibold"
-        >
-          Back to Home
-        </a>
-      </div>
+      <a
+        href="/green-hijama"
+        className="inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold"
+      >
+        Back to Home
+      </a>
     </div>
   );
 }
