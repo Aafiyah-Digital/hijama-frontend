@@ -80,7 +80,7 @@ export default function BookPage() {
   return (
     <div className="w-full max-w-xl bg-white/10 rounded-2xl p-10">
       <h2 className="text-2xl font-bold mb-8 text-center">
-        Book Appointment
+        Book Appointment v2
       </h2>
 
       <form className="space-y-6" onSubmit={handleSubmit}>
