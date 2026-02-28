@@ -1,31 +1,17 @@
-export default function ConfirmationPage({
-  searchParams,
-}: {
-  searchParams: { name?: string; date?: string; time?: string };
-}) {
-  const { name, date, time } = searchParams;
+"use client";
 
-  let downloadUrl: string | null = null;
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-  if (name && date && time) {
-    const start = new Date(`${date}T${time}`);
-    const end = new Date(start.getTime() + 60 * 60 * 1000);
+export default function ConfirmationPage() {
+  const params = useSearchParams();
+  const id = params.get("id");
 
-    const icsContent = `
-BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-SUMMARY:Hijama Appointment
-DESCRIPTION:Appointment for ${name}
-DTSTART:${start.toISOString().replace(/[-:]/g, "").split(".")[0]}Z
-DTEND:${end.toISOString().replace(/[-:]/g, "").split(".")[0]}Z
-END:VEVENT
-END:VCALENDAR
-`;
-
-    const base64 = Buffer.from(icsContent).toString("base64");
-    downloadUrl = `data:text/calendar;base64,${base64}`;
-  }
+  useEffect(() => {
+    if (id) {
+      window.location.href = `/api/bookings/${id}/ics`;
+    }
+  }, [id]);
 
   return (
     <div className="w-full max-w-xl bg-white/10 rounded-2xl p-10 text-center">
@@ -35,18 +21,8 @@ END:VCALENDAR
 
       <p className="text-white/80 mb-8">
         Your appointment has been received.
-        We will contact you shortly to confirm.
+        Your calendar download should begin automatically.
       </p>
-
-      {downloadUrl && (
-        <a
-          href={downloadUrl}
-          download="appointment.ics"
-          className="block bg-white text-black px-6 py-3 rounded-lg font-semibold mb-4"
-        >
-          Add to Calendar
-        </a>
-      )}
 
       <a
         href="/green-hijama"

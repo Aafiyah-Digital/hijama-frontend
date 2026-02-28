@@ -37,6 +37,8 @@ export async function GET(
     return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   }
 
+  const serviceName = booking.services?.[0]?.name || "Appointment";
+
   const ics = `
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -45,7 +47,7 @@ UID:${id}
 DTSTAMP:${format(new Date())}
 DTSTART:${format(start)}
 DTEND:${format(end)}
-SUMMARY:${booking.services?.name || "Appointment"}
+SUMMARY:${serviceName}
 DESCRIPTION:Hijama appointment for ${booking.full_name}
 END:VEVENT
 END:VCALENDAR
