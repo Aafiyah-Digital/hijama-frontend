@@ -58,29 +58,28 @@ export default function BookPage() {
 
     // Insert booking AND return inserted row
     const { data, error } = await supabase
-      .from("bookings")
-      .insert([
-        {
-          clinic_id: clinic.id,
-          service_id: formData.get("service_id"),
-          full_name: formData.get("full_name"),
-          phone: formData.get("phone"),
-          booking_date: formData.get("booking_date"),
-          booking_time: formData.get("booking_time"),
-          status: "pending",
-        },
-      ])
-      .select()
-      .single();
+  .from("bookings")
+  .insert([
+    {
+      clinic_id: clinic.id,
+      service_id: formData.get("service_id"),
+      full_name: formData.get("full_name"),
+      phone: formData.get("phone"),
+      booking_date: formData.get("booking_date"),
+      booking_time: formData.get("booking_time"),
+      status: "pending",
+    },
+  ])
+  .select()
+  .single();
 
-    if (error || !data) {
-      console.error(error);
-      setLoading(false);
-      return;
-    }
+if (error || !data) {
+  console.error(error);
+  setLoading(false);
+  return;
+}
 
-    // Redirect with booking ID
-    router.push(`/green-hijama/confirmation?id=${data.id}`);
+router.push(`/green-hijama/confirmation?id=${data.id}`);
   }
 
   return (
