@@ -110,7 +110,8 @@ export default function BookPage() {
           name="full_name"
           placeholder="Full Name"
           required
-          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30"
+          autoComplete="name"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base focus:outline-none focus:ring-2 focus:ring-white/30"
         />
 
         {/* Phone */}
@@ -119,7 +120,10 @@ export default function BookPage() {
           name="phone"
           placeholder="Phone Number"
           required
-          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30"
+          type="tel"
+          inputMode="numeric"
+          autoComplete="tel"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base focus:outline-none focus:ring-2 focus:ring-white/30"
         />
 
         {/* Service */}
@@ -127,7 +131,7 @@ export default function BookPage() {
         <select
           name="service_id"
           required
-          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white appearance-none text-base focus:outline-none focus:ring-2 focus:ring-white/30"
         >
           <option value="">Select Service</option>
 
@@ -144,7 +148,7 @@ export default function BookPage() {
           name="booking_date"
           type="date"
           required
-          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
         />
 
         {/* Time */}
@@ -153,7 +157,7 @@ export default function BookPage() {
           name="booking_time"
           type="time"
           required
-          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
         />
 
         {/* Submit */}
