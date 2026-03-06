@@ -130,33 +130,33 @@ export default function BookPage() {
         {/* Date */}
 
         <div className="relative">
-          <span className="absolute left-4 top-3 text-white/70 text-base pointer-events-none">
-            Date
-          </span>
-
           <input
             name="booking_date"
             type="date"
             required
-            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
+
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none peer-focus:opacity-0 peer-valid:opacity-0">
+            Date
+          </span>
         </div>
 
         {/* Time */}
 
         <div className="relative">
-          <span className="absolute left-4 top-3 text-white/70 text-base pointer-events-none">
-            Time
-          </span>
-
           <input
             name="booking_time"
             type="time"
             required
-            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
-        </div>
 
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none peer-focus:opacity-0 peer-valid:opacity-0">
+            Time
+          </span>
+        </div>
+        
         {/* Submit */}
 
         <button
