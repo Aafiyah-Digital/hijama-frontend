@@ -71,9 +71,9 @@ export default function BookPage() {
         .insert([
           {
             clinic_id: clinic.id,
-            service_id: formData.get("service_id"),
-            full_name: formData.get("full_name"),
-            phone: formData.get("phone"),
+            service_id: String(formData.get("service_id")),
+            full_name: String(formData.get("full_name")),
+            phone: String(formData.get("phone")),
             booking_date: String(formData.get("booking_date")),
             booking_time: String(formData.get("booking_time")),
             status: "pending",
@@ -85,9 +85,9 @@ export default function BookPage() {
       if (error) throw error;
 
       router.push(`/green-hijama/confirmation?id=${data.id}`);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Booking error:", err);
-      alert("Something went wrong. Please try again.");
+      alert(err?.message || JSON.stringify(err));
     }
 
     setLoading(false);
