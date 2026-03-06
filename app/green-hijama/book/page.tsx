@@ -15,7 +15,10 @@ export default function BookPage() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch services for this clinic
+  /* ---------------------------------------- */
+  /* Fetch services for clinic */
+  /* ---------------------------------------- */
+
   useEffect(() => {
     async function fetchServices() {
       const { data: clinic } = await supabase
@@ -29,7 +32,8 @@ export default function BookPage() {
       const { data } = await supabase
         .from("services")
         .select("*")
-        .eq("clinic_id", clinic.id);
+        .eq("clinic_id", clinic.id)
+        .order("price");
 
       if (data) setServices(data);
     }
@@ -37,79 +41,96 @@ export default function BookPage() {
     fetchServices();
   }, []);
 
+  /* ---------------------------------------- */
+  /* Submit booking */
+  /* ---------------------------------------- */
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (loading) return;
+
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    // Get clinic id
-    const { data: clinic } = await supabase
-      .from("clinics")
-      .select("id")
-      .eq("slug", "green-hijama")
-      .single();
+      const { data: clinic } = await supabase
+        .from("clinics")
+        .select("id")
+        .eq("slug", "green-hijama")
+        .single();
 
-    if (!clinic) {
-      console.error("Clinic not found");
-      setLoading(false);
-      return;
+      if (!clinic) throw new Error("Clinic not found");
+
+      const { data, error } = await supabase
+        .from("bookings")
+        .insert([
+          {
+            clinic_id: clinic.id,
+            service_id: formData.get("service_id"),
+            full_name: formData.get("full_name"),
+            phone: formData.get("phone"),
+            booking_date: formData.get("booking_date"),
+            booking_time: formData.get("booking_time"),
+            status: "pending",
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      router.push(`/green-hijama/confirmation?id=${data.id}`);
+    } catch (err) {
+      console.error("Booking error:", err);
+      alert("Something went wrong. Please try again.");
     }
 
-    // Insert booking AND return inserted row
-    const { data, error } = await supabase
-      .from("bookings")
-      .insert([
-        {
-          clinic_id: clinic.id,
-          service_id: formData.get("service_id"),
-          full_name: formData.get("full_name"),
-          phone: formData.get("phone"),
-          booking_date: formData.get("booking_date"),
-          booking_time: formData.get("booking_time"),
-          status: "pending",
-        },
-      ])
-      .select()
-      .single();
-
-    if (error || !data) {
-      console.error(error);
-      setLoading(false);
-      return;
-    }
-
-    // Redirect with booking ID
-    router.push(`/green-hijama/confirmation?id=${data.id}`);
+    setLoading(false);
   }
 
+  /* ---------------------------------------- */
+  /* UI */
+  /* ---------------------------------------- */
+
   return (
-    <div className="w-full max-w-xl bg-white/10 rounded-2xl p-10">
-      <h2 className="text-2xl font-bold mb-8 text-center">
+    <div className="w-full max-w-xl bg-white/10 rounded-2xl p-6 md:p-10 shadow-lg backdrop-blur">
+      <h2 className="text-2xl font-bold mb-8 text-center text-white">
         Book Appointment
       </h2>
 
-      <form className="space-y-6" onSubmit={handleSubmit}>
+      <form
+        className="space-y-4 md:space-y-6"
+        onSubmit={handleSubmit}
+      >
+        {/* Full Name */}
+
         <input
           name="full_name"
           placeholder="Full Name"
           required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30"
         />
+
+        {/* Phone */}
 
         <input
           name="phone"
           placeholder="Phone Number"
           required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30"
         />
+
+        {/* Service */}
 
         <select
           name="service_id"
           required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white focus:outline-none"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
         >
           <option value="">Select Service</option>
+
           {services.map((service) => (
             <option key={service.id} value={service.id}>
               {service.name} (£{service.price})
@@ -117,24 +138,30 @@ export default function BookPage() {
           ))}
         </select>
 
+        {/* Date */}
+
         <input
           name="booking_date"
           type="date"
           required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white focus:outline-none"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
         />
+
+        {/* Time */}
 
         <input
           name="booking_time"
           type="time"
           required
-          className="w-full bg-white/20 border border-white/40 rounded-lg px-4 py-3 text-white focus:outline-none"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
         />
+
+        {/* Submit */}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-white text-black py-3 rounded-lg font-semibold transition disabled:opacity-50"
+          className="w-full h-12 bg-white text-black rounded-lg font-semibold transition hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit Booking"}
         </button>
