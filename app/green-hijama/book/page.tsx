@@ -82,12 +82,19 @@ export default function BookPage() {
         .select()
         .single();
 
+      if (error) {
+        console.error("Supabase error:", error);
+        alert(error.message);
+        setLoading(false);
+        return;
+      }
+
       if (error) throw error;
 
       router.push(`/green-hijama/confirmation?id=${data.id}`);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Booking error:", err);
-      alert(err?.message || JSON.stringify(err));
+      alert(JSON.stringify(err));
     }
 
     setLoading(false);
