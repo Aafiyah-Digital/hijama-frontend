@@ -15,10 +15,6 @@ export default function BookPage() {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  /* ---------------------------------------- */
-  /* Fetch services for clinic */
-  /* ---------------------------------------- */
-
   useEffect(() => {
     async function fetchServices() {
       const { data: clinic } = await supabase
@@ -40,10 +36,6 @@ export default function BookPage() {
 
     fetchServices();
   }, []);
-
-  /* ---------------------------------------- */
-  /* Submit booking */
-  /* ---------------------------------------- */
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -90,20 +82,13 @@ export default function BookPage() {
     setLoading(false);
   }
 
-  /* ---------------------------------------- */
-  /* UI */
-  /* ---------------------------------------- */
-
   return (
     <div className="w-full max-w-xl bg-white/10 rounded-2xl p-6 md:p-10 shadow-lg backdrop-blur">
       <h2 className="text-2xl font-bold mb-8 text-center text-white">
         Book Appointment
       </h2>
 
-      <form
-        className="space-y-4 md:space-y-6"
-        onSubmit={handleSubmit}
-      >
+      <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
         {/* Full Name */}
 
         <input
@@ -144,28 +129,30 @@ export default function BookPage() {
 
         {/* Date */}
 
-        <div className="space-y-1">
-          <label className="text-sm text-white/80">Date</label>
-
+        <div className="relative">
           <input
             name="booking_date"
             type="date"
             required
-            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 pt-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
+          <label className="absolute left-4 top-1 text-xs text-white/70">
+            Date
+          </label>
         </div>
 
         {/* Time */}
 
-        <div className="space-y-1">
-          <label className="text-sm text-white/80">Time</label>
-
+        <div className="relative">
           <input
             name="booking_time"
             type="time"
             required
-            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 pt-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
+          <label className="absolute left-4 top-1 text-xs text-white/70">
+            Time
+          </label>
         </div>
 
         {/* Submit */}
