@@ -64,7 +64,11 @@ export default function BookPage() {
         .eq("slug", "green-hijama")
         .single();
 
-      if (!clinic) throw new Error("Clinic not found");
+      if (!clinic) {
+        alert("Clinic not found");
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from("bookings")
@@ -82,14 +86,16 @@ export default function BookPage() {
         .select()
         .single();
 
+      /* ---------------------- */
+      /* SHOW REAL DATABASE ERROR */
+      /* ---------------------- */
+
       if (error) {
-        console.error("Supabase error:", error);
+        console.error("SUPABASE ERROR:", error);
         alert(error.message);
         setLoading(false);
         return;
       }
-
-      if (error) throw error;
 
       router.push(`/green-hijama/confirmation?id=${data.id}`);
     } catch (err) {
@@ -111,8 +117,6 @@ export default function BookPage() {
       </h2>
 
       <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-        {/* Full Name */}
-
         <input
           name="full_name"
           placeholder="Full Name"
@@ -120,8 +124,6 @@ export default function BookPage() {
           autoComplete="name"
           className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base focus:outline-none focus:ring-2 focus:ring-white/30"
         />
-
-        {/* Phone */}
 
         <input
           name="phone"
@@ -132,8 +134,6 @@ export default function BookPage() {
           autoComplete="tel"
           className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base focus:outline-none focus:ring-2 focus:ring-white/30"
         />
-
-        {/* Service */}
 
         <select
           name="service_id"
@@ -186,8 +186,6 @@ export default function BookPage() {
             </span>
           )}
         </div>
-
-        {/* Submit */}
 
         <button
           type="submit"
