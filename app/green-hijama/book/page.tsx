@@ -129,31 +129,23 @@ export default function BookPage() {
 
         {/* Date */}
 
-        <div className="relative">
-          <input
-            name="booking_date"
-            type="date"
-            required
-            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 pt-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
-          />
-          <label className="absolute left-4 top-1 text-xs text-white/70">
-            Date
-          </label>
-        </div>
+        <input
+          name="booking_date"
+          type="date"
+          required
+          placeholder="Date"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+        />
 
         {/* Time */}
 
-        <div className="relative">
-          <input
-            name="booking_time"
-            type="time"
-            required
-            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 pt-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
-          />
-          <label className="absolute left-4 top-1 text-xs text-white/70">
-            Time
-          </label>
-        </div>
+        <input
+          name="booking_time"
+          type="time"
+          required
+          placeholder="Time"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+        />
 
         {/* Submit */}
 
