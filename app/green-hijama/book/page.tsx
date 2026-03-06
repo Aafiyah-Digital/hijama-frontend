@@ -9,11 +9,18 @@ export default function BookPage() {
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   );
 
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [dateValue, setDateValue] = useState("");
+  const [timeValue, setTimeValue] = useState("");
+
+  /* ---------------------------------------- */
+  /* Fetch services */
+  /* ---------------------------------------- */
 
   useEffect(() => {
     async function fetchServices() {
@@ -36,6 +43,10 @@ export default function BookPage() {
 
     fetchServices();
   }, []);
+
+  /* ---------------------------------------- */
+  /* Submit booking */
+  /* ---------------------------------------- */
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,8 +74,8 @@ export default function BookPage() {
             service_id: formData.get("service_id"),
             full_name: formData.get("full_name"),
             phone: formData.get("phone"),
-            booking_date: formData.get("booking_date"),
-            booking_time: formData.get("booking_time"),
+            booking_date: String(formData.get("booking_date")),
+            booking_time: String(formData.get("booking_time")),
             status: "pending",
           },
         ])
@@ -81,6 +92,10 @@ export default function BookPage() {
 
     setLoading(false);
   }
+
+  /* ---------------------------------------- */
+  /* UI */
+  /* ---------------------------------------- */
 
   return (
     <div className="w-full max-w-xl bg-white/10 rounded-2xl p-6 md:p-10 shadow-lg backdrop-blur">
@@ -134,12 +149,16 @@ export default function BookPage() {
             name="booking_date"
             type="date"
             required
-            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+            value={dateValue}
+            onChange={(e) => setDateValue(e.target.value)}
+            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
 
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none transition-opacity peer-focus:opacity-0">
-            Date
-          </span>
+          {!dateValue && (
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none">
+              Date
+            </span>
+          )}
         </div>
 
         {/* Time */}
@@ -149,12 +168,16 @@ export default function BookPage() {
             name="booking_time"
             type="time"
             required
-            className="peer w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
+            value={timeValue}
+            onChange={(e) => setTimeValue(e.target.value)}
+            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
 
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none transition-opacity peer-focus:opacity-0">
-            Time
-          </span>
+          {!timeValue && (
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none">
+              Time
+            </span>
+          )}
         </div>
 
         {/* Submit */}
