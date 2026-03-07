@@ -70,10 +70,6 @@ export default function BookPage() {
         return;
       }
 
-      /* ---------------------------------------- */
-      /* Generate cancel token */
-      /* ---------------------------------------- */
-
       const cancelToken = crypto.randomUUID();
 
       const { data, error } = await supabase
@@ -91,11 +87,11 @@ export default function BookPage() {
             cancel_token: cancelToken,
           },
         ])
-        .select("id")
-        .single();
+        .select("id");
 
       if (error) {
         console.error("SUPABASE ERROR:", error);
+
         if (error.message.includes("prevent_double_booking")) {
           alert(
             "This time slot is already booked. Please choose another time.",
@@ -103,11 +99,14 @@ export default function BookPage() {
         } else {
           alert(error.message);
         }
+
         setLoading(false);
         return;
       }
 
-      router.push(`/green-hijama/confirmation?id=${data.id}`);
+      const bookingId = data?.[0]?.id;
+
+      router.push(`/green-hijama/confirmation?id=${bookingId}`);
     } catch (err) {
       console.error("Booking error:", err);
       alert(JSON.stringify(err));
@@ -170,41 +169,25 @@ export default function BookPage() {
 
         {/* Date */}
 
-        <div className="relative">
-          <input
-            name="booking_date"
-            type="date"
-            required
-            value={dateValue}
-            onChange={(e) => setDateValue(e.target.value || "")}
-            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
-          />
-
-          {!dateValue && (
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none">
-              Date
-            </span>
-          )}
-        </div>
+        <input
+          name="booking_date"
+          type="date"
+          required
+          value={dateValue}
+          onChange={(e) => setDateValue(e.target.value)}
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base focus:outline-none focus:ring-2 focus:ring-white/30"
+        />
 
         {/* Time */}
 
-        <div className="relative">
-          <input
-            name="booking_time"
-            type="time"
-            required
-            value={timeValue}
-            onChange={(e) => setTimeValue(e.target.value || "")}
-            className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
-          />
-
-          {!timeValue && (
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 text-base pointer-events-none">
-              Time
-            </span>
-          )}
-        </div>
+        <input
+          name="booking_time"
+          type="time"
+          required
+          value={timeValue}
+          onChange={(e) => setTimeValue(e.target.value)}
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base focus:outline-none focus:ring-2 focus:ring-white/30"
+        />
 
         <button
           type="submit"
