@@ -76,23 +76,19 @@ export default function BookPage() {
 
       const cancelToken = crypto.randomUUID();
 
-      const { data, error } = await supabase
-        .from("bookings")
-        .insert([
-          {
-            clinic_id: clinic.id,
-            service_id: String(formData.get("service_id")),
-            full_name: String(formData.get("full_name")),
-            phone: String(formData.get("phone")),
-            email: String(formData.get("email")),
-            booking_date: String(formData.get("booking_date")),
-            booking_time: String(formData.get("booking_time")),
-            status: "pending",
-            cancel_token: cancelToken,
-          },
-        ])
-        .select()
-        .single();
+      const { error } = await supabase.from("bookings").insert([
+        {
+          clinic_id: clinic.id,
+          service_id: String(formData.get("service_id")),
+          full_name: String(formData.get("full_name")),
+          phone: String(formData.get("phone")),
+          email: String(formData.get("email")),
+          booking_date: String(formData.get("booking_date")),
+          booking_time: String(formData.get("booking_time")),
+          status: "pending",
+          cancel_token: cancelToken,
+        },
+      ]);
 
       if (error) {
         console.error("SUPABASE ERROR:", error);
@@ -101,7 +97,7 @@ export default function BookPage() {
         return;
       }
 
-      router.push(`/green-hijama/confirmation?id=${data.id}`);
+      router.push(`/green-hijama/confirmation`);
     } catch (err) {
       console.error("Booking error:", err);
       alert(JSON.stringify(err));
