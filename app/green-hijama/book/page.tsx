@@ -76,28 +76,38 @@ export default function BookPage() {
 
       const cancelToken = crypto.randomUUID();
 
-      const { error } = await supabase.from("bookings").insert([
-        {
-          clinic_id: clinic.id,
-          service_id: String(formData.get("service_id")),
-          full_name: String(formData.get("full_name")),
-          phone: String(formData.get("phone")),
-          email: String(formData.get("email")),
-          booking_date: String(formData.get("booking_date")),
-          booking_time: String(formData.get("booking_time")),
-          status: "pending",
-          cancel_token: cancelToken,
-        },
-      ]);
+      const { data, error } = await supabase
+        .from("bookings")
+        .insert([
+          {
+            clinic_id: clinic.id,
+            service_id: String(formData.get("service_id")),
+            full_name: String(formData.get("full_name")),
+            phone: String(formData.get("phone")),
+            email: String(formData.get("email")),
+            booking_date: String(formData.get("booking_date")),
+            booking_time: String(formData.get("booking_time")),
+            status: "pending",
+            cancel_token: cancelToken,
+          },
+        ])
+        .select("id")
+        .single();
 
       if (error) {
         console.error("SUPABASE ERROR:", error);
-        alert(error.message);
+        if (error.message.includes("prevent_double_booking")) {
+          alert(
+            "This time slot is already booked. Please choose another time.",
+          );
+        } else {
+          alert(error.message);
+        }
         setLoading(false);
         return;
       }
 
-      router.push(`/green-hijama/confirmation`);
+      router.push(`/green-hijama/confirmation?id=${data.id}`);
     } catch (err) {
       console.error("Booking error:", err);
       alert(JSON.stringify(err));
