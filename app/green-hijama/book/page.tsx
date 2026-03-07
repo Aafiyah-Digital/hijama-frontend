@@ -88,15 +88,11 @@ export default function BookPage() {
             booking_date: String(formData.get("booking_date")),
             booking_time: String(formData.get("booking_time")),
             status: "pending",
-            cancel_token: cancelToken, // ✅ added
+            cancel_token: cancelToken,
           },
         ])
         .select()
         .single();
-
-      /* ---------------------- */
-      /* SHOW REAL DATABASE ERROR */
-      /* ---------------------- */
 
       if (error) {
         console.error("SUPABASE ERROR:", error);
@@ -166,8 +162,6 @@ export default function BookPage() {
           ))}
         </select>
 
-        {/* Date */}
-
         <div className="relative">
           <input
             name="booking_date"
@@ -184,8 +178,6 @@ export default function BookPage() {
             </span>
           )}
         </div>
-
-        {/* Time */}
 
         <div className="relative">
           <input
