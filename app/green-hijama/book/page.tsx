@@ -70,6 +70,12 @@ export default function BookPage() {
         return;
       }
 
+      /* ---------------------------------------- */
+      /* Generate cancel token */
+      /* ---------------------------------------- */
+
+      const cancelToken = crypto.randomUUID();
+
       const { data, error } = await supabase
         .from("bookings")
         .insert([
@@ -78,9 +84,11 @@ export default function BookPage() {
             service_id: String(formData.get("service_id")),
             full_name: String(formData.get("full_name")),
             phone: String(formData.get("phone")),
+            email: String(formData.get("email")),
             booking_date: String(formData.get("booking_date")),
             booking_time: String(formData.get("booking_time")),
             status: "pending",
+            cancel_token: cancelToken, // ✅ added
           },
         ])
         .select()
@@ -132,6 +140,15 @@ export default function BookPage() {
           type="tel"
           inputMode="numeric"
           autoComplete="tel"
+          className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base focus:outline-none focus:ring-2 focus:ring-white/30"
+        />
+
+        <input
+          name="email"
+          placeholder="Email Address"
+          required
+          type="email"
+          autoComplete="email"
           className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white placeholder-white/70 text-base focus:outline-none focus:ring-2 focus:ring-white/30"
         />
 
