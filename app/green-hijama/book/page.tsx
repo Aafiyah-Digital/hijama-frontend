@@ -162,13 +162,15 @@ export default function BookPage() {
           ))}
         </select>
 
+        {/* Date */}
+
         <div className="relative">
           <input
             name="booking_date"
             type="date"
             required
             value={dateValue}
-            onChange={(e) => setDateValue(e.target.value)}
+            onChange={(e) => setDateValue(e.target.value || "")}
             className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
 
@@ -179,13 +181,15 @@ export default function BookPage() {
           )}
         </div>
 
+        {/* Time */}
+
         <div className="relative">
           <input
             name="booking_time"
             type="time"
             required
             value={timeValue}
-            onChange={(e) => setTimeValue(e.target.value)}
+            onChange={(e) => setTimeValue(e.target.value || "")}
             className="w-full h-12 bg-white/20 border border-white/40 rounded-lg px-4 text-white text-base appearance-none focus:outline-none focus:ring-2 focus:ring-white/30"
           />
 
